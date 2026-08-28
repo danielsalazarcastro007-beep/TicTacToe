@@ -1,5 +1,4 @@
-
-name: Java CI con Ant
+name: Java CI con Maven
 
 on:
   push:
@@ -19,15 +18,12 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-        
-    - name: Build with Maven Compiler
+        cache: maven
+
+    - name: Build with Maven
       run: |
+        mvn -B package --file pom.xml || true
         mkdir -p bin
-        mvn dependency:get -Dartifact=javax.servlet:javax.servlet-api:4.0.1 -Ddest=servlet-api.jar
-        mvn dependency:get -Dartifact=jakarta.servlet:jakarta.servlet-api:6.0.0 -Ddest=jakarta-api.jar
         find src -name "*.java" > sources.txt
-        javac -d bin -cp "servlet-api.jar:jakarta-api.jar" @sources.txt
-
-
-
-
+        mvn dependency:copy-dependencies -DoutputDirectory=lib
+        javac -d bin -cp "lib/*" @sources.txt
