@@ -23,4 +23,5 @@ jobs:
     - name: Build with Java Compiler
       run: |
         mkdir -p bin
-        javac -d bin src/*.java
+        find src -name "*.java" > sources.txt
+        javac -d bin @sources.txt
