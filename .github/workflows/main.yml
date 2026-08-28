@@ -20,15 +20,12 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         
-    - name: Download Servlet API
-      run: |
-        mkdir -p lib
-        curl -sL "https://tinyurl.com" -o lib/servlet-api.jar
-
-    - name: Build with Java Compiler
+    - name: Build with Maven Compiler
       run: |
         mkdir -p bin
+        mvn dependency:get -Dartifact=javax.servlet:javax.servlet-api:4.0.1 -Ddest=servlet-api.jar
         find src -name "*.java" > sources.txt
-        javac -d bin -cp "lib/*" @sources.txt
+        javac -d bin -cp "servlet-api.jar" @sources.txt
+
 
 
