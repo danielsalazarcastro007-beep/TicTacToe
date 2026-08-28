@@ -1,4 +1,4 @@
-name: Java CI con Maven
+name: Java CI
 
 on:
   push:
@@ -18,12 +18,11 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-        cache: maven
 
-    - name: Build with Maven
+    - name: Build with Java Compiler
       run: |
-        mvn -B package --file pom.xml || true
         mkdir -p bin
+        mkdir -p lib
+        curl -sL "https://maven.org" -o lib/jakarta-api.jar
         find src -name "*.java" > sources.txt
-        mvn dependency:copy-dependencies -DoutputDirectory=lib
         javac -d bin -cp "lib/*" @sources.txt
